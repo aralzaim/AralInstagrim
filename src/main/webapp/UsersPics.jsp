@@ -6,7 +6,7 @@
 
 <%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@ page import="uk.ac.dundee.computing.aralzaim.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,25 +16,36 @@
     </head>
     <body>
         <header>
-        
-        <h1>InstaGrim ! </h1>
-        <h2>Your world in Black and White</h2>
+    
+        <h1 align="center">InstaGrim !</h1>
+     
+        <h2 align="center">Your world in Black and White</h2>
         </header>
         
-        <nav>
-            <ul>
+       <div id="options" align="center">
+             <div align="center">
+                                 <%
+           LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+           if (lg != null) {
+           if (lg.getlogedin()){
+           
+        	   
+        	   
+           %>
                 <li class="nav"><a href="/Instagrim/upload.jsp">Upload</a></li>
-                <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
-            </ul>
-        </nav>
- 
-        <article>
-            <h1>Your Pics</h1>
+                <li class="nav"><a href="/Instagrim/Slideshow/<%=lg.getUser().getUsername() %>">Slide Show</a></li>
+               
+                
+           
+        
+ </div>
+        <article >
+            <h1 align="center">Your Pics</h1>
         <%
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
             if (lsPics == null) {
         %>
-        <p>No Pictures found</p>
+        <p align="center">No Pictures found</p>
         <%
         } else {
             Iterator<Pic> iterator;
@@ -43,16 +54,29 @@
                 Pic p = (Pic) iterator.next();
 
         %>
-        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+        <div id="showingpictures" align="center">
+        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> <br/>
+        <a href="/Instagrim/Alter/<%=p.getSUUID()%>"> Alter Image</a>
+    	<a href="/Instagrim/Delete/<%=p.getSUUID()%>" onclick="return confirm('You are about to delete a picture!')">Delete Image</a>
+        </div>
+       <%
 
             }
-            }
+            }}}
         %>
+        
         </article>
+      
         <footer>
-            <ul>
+               
+          
+          <li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
+
+             
                 <li class="footer"><a href="/Instagrim">Home</a></li>
-            </ul>
+            	</div>
+                
         </footer>
+      
     </body>
 </html>

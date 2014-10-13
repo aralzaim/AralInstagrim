@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrim.lib;
+package uk.ac.dundee.computing.aralzaim.instagrim.lib;
 
 import java.io.UnsupportedEncodingException; 
 import java.security.MessageDigest; 

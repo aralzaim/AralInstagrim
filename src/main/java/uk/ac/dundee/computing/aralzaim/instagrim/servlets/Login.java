@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dundee.computing.aec.instagrim.servlets;
+package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,9 +19,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+
+import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
 
 /**
  *
@@ -28,7 +31,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
-    Cluster cluster=null;
+    private Cluster cluster=null;
 
 
     public void init(ServletConfig config) throws ServletException {
@@ -48,10 +51,12 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    	User us=new User();
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         
-        User us=new User();
+        
+        
         us.setCluster(cluster);
         boolean isValid=us.IsValidUser(username, password);
         HttpSession session=request.getSession();
@@ -59,13 +64,24 @@ public class Login extends HttpServlet {
         if (isValid){
             LoggedIn lg= new LoggedIn();
             lg.setLogedin();
-            lg.setUsername(username);
-            //request.setAttribute("LoggedIn", lg);
+            
+            
+            
+            us.setUsername(username);
+            
+            
+            us.fetchUserDetailsfromDB(username);   
+
+           
+            lg.setUser(us);
             
             session.setAttribute("LoggedIn", lg);
+            
+           
             System.out.println("Session in servlet "+session);
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    rd.forward(request,response);
+            
+            rd.forward(request,response);
             
         }else{
             response.sendRedirect("/Instagrim/login.jsp");

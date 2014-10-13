@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dundee.computing.aec.instagrim.stores;
+package uk.ac.dundee.computing.aralzaim.instagrim.stores;
+
+import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 
 /**
  *
@@ -12,16 +14,16 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  */
 public class LoggedIn {
     boolean logedin=false;
-    String Username=null;
+    User user;
     public void LogedIn(){
         
     }
     
-    public void setUsername(String name){
-        this.Username=name;
+    public void setUser(User user){
+        this.user=user;
     }
-    public String getUsername(){
-        return Username;
+    public User getUser(){
+        return user;
     }
     public void setLogedin(){
         logedin=true;

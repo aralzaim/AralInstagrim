@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dundee.computing.aec.instagrin.filters;
+package uk.ac.dundee.computing.aralzaim.instagrin.filters;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,7 +22,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
 
 /**
  *

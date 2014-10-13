@@ -1,6 +1,7 @@
-package uk.ac.dundee.computing.aec.instagrim.servlets;
+package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -8,6 +9,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.naming.ldap.Rdn;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,15 +22,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+
+import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aralzaim.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.aralzaim.instagrim.models.PicModel;
+import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
 
 /**
  * Servlet implementation class Image
@@ -36,7 +43,12 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Image/*",
     "/Thumb/*",
     "/Images",
-    "/Images/*"
+    "/Images/*",
+    "/Delete/*",
+    "/Slideshow",
+    "/Slideshow/*",
+    "/Alter/",
+    "/Alter/*"
 })
 @MultipartConfig
 
@@ -57,6 +69,9 @@ public class Image extends HttpServlet {
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
+        CommandsMap.put("Delete", 4);
+        CommandsMap.put("Slideshow", 5);
+        CommandsMap.put("Alter", 6);
 
     }
 
@@ -69,9 +84,17 @@ public class Image extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      * response)
      */
+
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String args[] = Convertors.SplitRequestPath(request);
+        HttpSession session=request.getSession();
+        LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
+        User us=lg.getUser();
+        String username= us.getUsername();
+        
+        
         int command;
         try {
             command = (Integer) CommandsMap.get(args[1]);
@@ -89,12 +112,62 @@ public class Image extends HttpServlet {
             case 3:
                 DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
                 break;
+            case 4:
+            	DeleteImage(username,args[2], request, response);
+            	break;
+            case 5:
+            	SlideShow(username,request,response);
+                break;
+            
+            case 6: 
+            	
+            	AlterImage(username, args[2],request,response);
+                
             default:
                 error("Bad Operator", response);
+                
+                
+                
+                response.sendRedirect("/Instagrim/Profile/"+username);
+                
         }
     }
 
-    private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void AlterImage(String username, String picid, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+    	
+    	PicModel pm= new PicModel();
+    	Pic pic = null;
+    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   	
+    	   Iterator<Pic> iterator;
+           iterator = lsPics.iterator();
+           while (iterator.hasNext()) {
+               Pic p = (Pic) iterator.next();
+               if(p.getSUUID().toString().equals(picid)){
+            	   
+            	   System.out.println("Found the picture to alter");
+            	   pic=p;
+               }
+              
+    	
+           }
+    	
+    	RequestDispatcher rd= request.getRequestDispatcher("/alter.jsp");
+    	request.setAttribute("Pic", pic);
+    	rd.forward(request,response);
+	}
+
+	private void SlideShow(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException{
+    	
+    	PicModel pm = new PicModel();
+    	pm.setCluster(cluster);
+    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   	
+    	RequestDispatcher rd= request.getRequestDispatcher("/slideshow.jsp");
+    	request.setAttribute("Pics", lsPics);
+    	rd.forward(request,response);
+	}
+
+	private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
@@ -103,8 +176,19 @@ public class Image extends HttpServlet {
         rd.forward(request, response);
 
     }
+    private void DeleteImage(String username,String delid,HttpServletRequest request , HttpServletResponse response) throws ServletException, IOException{
+    	
+    
+    	PicModel delpic=new PicModel();	
+    	delpic.deletePic(username, delid);
+    	response.sendRedirect("/Instagrim/Images/"+username);
+        
+    }
+   
+ 
 
-    private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
+   
+   private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
   
@@ -138,7 +222,7 @@ public class Image extends HttpServlet {
             LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
             String username="majed";
             if (lg.getlogedin()){
-                username=lg.getUsername();
+                username=lg.getUser().getUsername();
             }
             if (i > 0) {
                 byte[] b = new byte[i + 1];
@@ -146,7 +230,9 @@ public class Image extends HttpServlet {
                 System.out.println("Length : " + b.length);
                 PicModel tm = new PicModel();
                 tm.setCluster(cluster);
+                System.out.println("HERE" + b);
                 tm.insertPic(b, type, filename, username);
+                
 
                 is.close();
             }

@@ -1,12 +1,7 @@
-<%-- 
-    Document   : index
-    Created on : Sep 28, 2014, 7:01:44 PM
-    Author     : Administrator
---%>
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@page import="uk.ac.dundee.computing.aralzaim.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,39 +11,50 @@
     </head>
     <body>
         <header>
-            <h1>InstaGrim ! </h1>
-            <h2>Your world in Black and White</h2>
+            <h1 align="center">InstaGrim ! </h1>
+            <h2 align="center">Your world in Black and White</h2>
         </header>
-        <nav>
-            <ul>
+       
 
-               
-                <li><a href="upload.jsp">Upload</a></li>
+               <div align="center">
+               <li><a href="upload.jsp">Upload</a></li>
                     <%
                         
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
-                            String UserName = lg.getUsername();
+                            String UserName = lg.getUser().getUsername();
                             if (lg.getlogedin()) {
                     %>
 
-                <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
+                <li><a href="/Instagrim/Images/<%=lg.getUser().getUsername()%>">Your Images</a></li>
+                 <li class= "nav"><a href="/Instagrim/Profile/<%=lg.getUser().getUsername()%>">Your Profile</a></li>
                     <%}
-                            }else{
+                        }else{
                                 %>
                  <li><a href="register.jsp">Register</a></li>
                 <li><a href="login.jsp">Login</a></li>
-                <%
-                                        
-                            
-                    }%>
-            </ul>
-        </nav>
+                <%}%>
+           </div>
+           
+
+           
+          
+          
+           
         <footer>
-            <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
-                <li>&COPY; Andy C</li>
-            </ul>
+            <div align="center"> <li class="footer"><a href="/Instagrim">Home</a></li>
+                       <%
+           if (lg != null) {
+           if (lg.getlogedin()){
+           
+           %>
+            
+             <li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
+           
+             <%}} %>
+                <li >ARAL ZAIM</li>
+           </div>
+               
         </footer>
     </body>
 </html>

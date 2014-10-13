@@ -34,6 +34,8 @@
         </article>
         <footer>
             <ul>
+             	<li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
+           
                 <li class="footer"><a href="/Instagrim">Home</a></li>
             </ul>
         </footer>

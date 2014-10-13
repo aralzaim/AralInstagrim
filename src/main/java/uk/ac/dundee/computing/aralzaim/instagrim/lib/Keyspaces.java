@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrim.lib;
+package uk.ac.dundee.computing.aralzaim.instagrim.lib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public final class Keyspaces {
                     + "picid uuid,\n"
                     + "user varchar,\n"
                     + "pic_added timestamp,\n"
-                    + "PRIMARY KEY (user,pic_added)\n"
+                    + "PRIMARY KEY (picid,pic_added)\n"
                     + ") WITH CLUSTERING ORDER BY (pic_added desc);";
             String CreateAddressType = "CREATE TYPE if not exists instagrim.address (\n"
                     + "      street text,\n"
@@ -49,6 +49,10 @@ public final class Keyspaces {
                     + "      email set<text>,\n"
                     + "      addresses  map<text, frozen <address>>\n"
                     + "  );";
+            
+            String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON instagrim.userpiclist (user);";
+            
+            
             Session session = c.connect();
             try {
                 PreparedStatement statement = session
@@ -93,6 +97,22 @@ public final class Keyspaces {
             } catch (Exception et) {
                 System.out.println("Can't create Address Profile " + et);
             }
+            
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfile);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create Address Profile " + et);
+            }
+            System.out.println("" + CreateUserPicsIndex);
+
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateUserPicsIndex);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create user pic list index " + et);
+            }
+            
             session.close();
 
         } catch (Exception et) {

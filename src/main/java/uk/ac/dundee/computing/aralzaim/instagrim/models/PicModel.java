@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrim.models;
+package uk.ac.dundee.computing.aralzaim.instagrim.models;
 
 /*
  * Expects a cassandra columnfamily defined as
@@ -19,10 +19,11 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.utils.Bytes;
+import com.eaio.uuid.UUID;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,12 +31,15 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.LinkedList;
+
 import javax.imageio.ImageIO;
+
 import static org.imgscalr.Scalr.*;
+
 import org.imgscalr.Scalr.Method;
 
-import uk.ac.dundee.computing.aec.instagrim.lib.*;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aralzaim.instagrim.lib.*;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 
 public class PicModel {
@@ -81,10 +85,39 @@ public class PicModel {
             session.execute(bsInsertPic.bind(picid, buffer, thumbbuf,processedbuf, user, DateAdded, length,thumblength,processedlength, type, name));
             session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
             session.close();
-
+           
         } catch (IOException ex) {
             System.out.println("Error --> " + ex);
         }
+    }
+    
+    public void deletePic(String username, String picid){
+    	
+    	Session session = CassandraHosts.getCluster().connect("instagrim");
+    	
+    	
+    	
+    	java.util.UUID uuid=java.util.UUID.fromString(picid);
+    	
+    	System.out.println("I am here!"+uuid);
+    	
+    	String queryDeletePic="DELETE FROM instagrim.pics WHERE picid=?";
+    	String queryDeletePicToUser="DELETE FROM instagrim.userpiclist WHERE picid=?";
+    	
+    	
+    	
+    	PreparedStatement psDeletePic = session.prepare(queryDeletePic);
+    	PreparedStatement psDeletePicToUser=session.prepare(queryDeletePicToUser);
+    	
+     	BoundStatement bsDeletePic=new BoundStatement(psDeletePic);
+     	BoundStatement bsDeletePicToUser=new BoundStatement(psDeletePicToUser);
+    	
+    	
+     	
+    	session.execute(bsDeletePic.bind(uuid));
+    	session.execute(bsDeletePicToUser.bind(uuid));
+    	
+   
     }
 
     public byte[] picresize(String picid,String type) {
@@ -134,7 +167,7 @@ public class PicModel {
    
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
-        Session session = cluster.connect("instagrim");
+    	Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
