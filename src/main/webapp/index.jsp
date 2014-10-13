@@ -10,7 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>  
-        <header>
+        <header> 
             <h1 align="center">InstaGrim ! </h1>
             <h2 align="center">Your world in Black and White</h2>
         </header>  
