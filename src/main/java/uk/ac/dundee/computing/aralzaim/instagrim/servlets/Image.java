@@ -161,9 +161,11 @@ public class Image extends HttpServlet {
     	
     	PicModel pm = new PicModel();
     	pm.setCluster(cluster);
-    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   	
+    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   
+    	
     	RequestDispatcher rd= request.getRequestDispatcher("/slideshow.jsp");
     	request.setAttribute("Pics", lsPics);
+    	
     	rd.forward(request,response);
 	}
 

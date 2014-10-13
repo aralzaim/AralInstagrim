@@ -11,30 +11,44 @@
 <body>
 
 <%
-            java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+			java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
             if (lsPics == null) {
+            	
+            	
             	
         %> 
 <p align="center">
 <%
         } else {
-       %>
-	<p align="center"><img src="" width="700" height="400" name="slide" /></p>
+        	%>
+	<p align="center"><img src="" width="500" height="200" name="slide" /></p>
  	<script>
  	var sImages=new Array()
+ 	var i=0;
+ 	<%Iterator <Pic> iterator=lsPics.iterator();
+	while(iterator.hasNext()){
+		
+ 	%>
  	
- 	for(var i=0;i<<%=lsPics.size()%>;i++){
- 	sImages[i] = new Image();
+		
+		
  	
- 	sImages[i].src = "/Instagrim/Thumb/<%=lsPics.iterator().next().getSUUID()%>";
- 	}
- 	
+ 			<%    Pic p = (Pic) iterator.next();%>
+ 		sImages[i] = new Image();
+ 		sImages[i].src="/Instagrim/Thumb/<%=p.getSUUID()%>";
+ 		console.log(i);
+ 		console.log(sImages[i]);
+ 		i++;
+ 		
+ 		<%}%>
+ 
+
  	var speed=2000
 
  	var countImage=0;
  	function slideit(){
  		
- 		console.log(sImages);
+ 		console.log(sImages[countImage]);
  		
  	    document.getElementsByName("slide")[0].src=sImages[countImage].src;
  	    if (countImage<sImages.length-1)
