@@ -13,7 +13,7 @@
         <header>
             <h1 align="center">InstaGrim ! </h1>
             <h2 align="center">Your world in Black and White</h2>
-        </header>
+        </header>  
        
 
                <div align="center">
