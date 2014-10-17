@@ -52,6 +52,16 @@ public final class Keyspaces {
             
             String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON instagrim.userpiclist (user);";
             
+            String CreateUserProfilePic="CREATE TABLE if not exists instagrim.profilePics ("
+                    + " user varchar,"
+                    + " picid uuid, "
+                    + " interaction_time timestamp,"
+                    + " thumb blob,"
+                    + " thumblength int,"
+                    + " type  varchar,"
+                    + " name  varchar,"
+                    + " PRIMARY KEY (user,picid)"
+                    + ")";
             
             Session session = c.connect();
             try {
@@ -97,13 +107,7 @@ public final class Keyspaces {
             } catch (Exception et) {
                 System.out.println("Can't create Address Profile " + et);
             }
-            
-            try {
-                SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfile);
-                session.execute(cqlQuery);
-            } catch (Exception et) {
-                System.out.println("Can't create Address Profile " + et);
-            }
+           
             System.out.println("" + CreateUserPicsIndex);
 
             try {
@@ -111,6 +115,13 @@ public final class Keyspaces {
                 session.execute(cqlQuery);
             } catch (Exception et) {
                 System.out.println("Can't create user pic list index " + et);
+            }
+            
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfilePic);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create user profile pic list index " + et);
             }
             
             session.close();

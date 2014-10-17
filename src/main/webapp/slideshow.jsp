@@ -10,6 +10,8 @@
 </head>
 <body>
 
+<h2 align="center">Slide Show with your Pictures</h2>
+	
 <%
 			java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
             if (lsPics == null) {
@@ -21,7 +23,7 @@
 <%
         } else {
         	%>
-	<p align="center"><img src="" width="500" height="200" name="slide" /></p>
+	<p align="center"><img src="" width="700" height="400" name="slide" /></p>
  	<script>
  	var sImages=new Array()
  	var i=0;
@@ -35,7 +37,7 @@
  	
  			<%    Pic p = (Pic) iterator.next();%>
  		sImages[i] = new Image();
- 		sImages[i].src="/Instagrim/Thumb/<%=p.getSUUID()%>";
+ 		sImages[i].src="/Instagrim/Image/<%=p.getSUUID()%>";
  		console.log(i);
  		console.log(sImages[i]);
  		i++;
@@ -66,5 +68,16 @@
   
        <% } %>
  </p>
+         <footer>
+               
+          <div align="center">
+          <li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
+
+             
+                <li class="footer"><a href="/Instagrim">Home</a></li>
+            	</div>
+                
+        </footer>
+      
 </body>
 </html>

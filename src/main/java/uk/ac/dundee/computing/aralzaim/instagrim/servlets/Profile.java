@@ -1,6 +1,7 @@
 package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,10 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import com.datastax.driver.core.Cluster;
 
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aralzaim.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
 
@@ -40,6 +43,7 @@ public class Profile extends HttpServlet {
 	    }
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException{
 		
+		
 		  String username=request.getParameter("username");
 		  String firstname=request.getParameter("firstname");
 		  String surname=request.getParameter("lastname");
@@ -49,28 +53,33 @@ public class Profile extends HttpServlet {
 		  User us= new User();
 		  us.setCluster(cluster);
 		  
-		  System.out.println("before if");
+		 
+		  System.out.println(username+firstname+surname+email);
+	
 		  
 		  if(us.checkEmailExist(username,email)){
 			  
 		 
-		  
-		  
-		  Set emails =new HashSet<String>();
-
-		  emails.add(email);
-		  
+			  Set emails =new HashSet<String>();
+		  if(!email.equals("")){
+		 
+			  System.out.println("NOT EMPTY"+ emails.toString());
+			  emails.add(email);
+		  }
 		  
 		
 		  us.updateUserDetails(username, firstname, surname, emails, address);
 		
-		  }
+		
 		 
 			response.sendRedirect("/Instagrim/Profile/"+username);
 		  
-		  
-	  }
 	  
+
+	  }
+		  
+	  
+	  }
 	  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  
 

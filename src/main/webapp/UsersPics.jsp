@@ -56,7 +56,7 @@
         %>
         <div id="showingpictures" align="center">
         <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> <br/>
-        <a href="/Instagrim/Alter/<%=p.getSUUID()%>"> Alter Image</a>
+        <a href="/Instagrim/OrginalImage/<%=p.getSUUID()%>">Orginal Image   </a>
     	<a href="/Instagrim/Delete/<%=p.getSUUID()%>" onclick="return confirm('You are about to delete a picture!')">Delete Image</a>
         </div>
        <%

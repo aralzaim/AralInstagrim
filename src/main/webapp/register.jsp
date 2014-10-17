@@ -42,9 +42,12 @@
         </article>
         
         <footer>
+        <div align="center">
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
             </ul>
+            
+         </div>
         </footer>
     </body>
 </html>

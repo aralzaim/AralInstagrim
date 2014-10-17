@@ -32,9 +32,15 @@
         <article>
         <h2>Hello <%= us.getFirstname() %> !</h2>
         	<h3>Edit your profile</h3>
-        	<form method = "POST" action= "Profile">
-        
-        	Change Profile Picture: <input type="file" name="profilepic"></br>
+        	
+        	
+        	
+        	<form method = "POST" enctype="multipart/form-data" action="/Instagrim/ProfPicture">
+        		Change Profile Picture: <input type="file" name="profilepic"></br>
+        		<input type="submit" value="Change">
+        		</form>
+        	
+        	<form method = "POST"  action= "Profile">
         	User Name: <input type="text" name="username" readonly="readonly" value="<%=us.getUsername()%>"></br>
         	First Name: <input type="text" name="firstname" value="<%=us.getFirstname()%>"></br>
         	Last Name: <input type="text" name="lastname" value="<%=us.getLastname()%>"></br>
@@ -51,15 +57,15 @@
         	
         	
         </article>
-        </div>
-    	
+        
  <footer>
-            <ul>
+          
             	<li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
            
                 <li class="footer"><a href="/Instagrim">Home</a></li>
-            </ul>
+         
         </footer>
-
+</div>
+    	
 </body>
 </html>

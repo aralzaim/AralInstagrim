@@ -144,7 +144,7 @@ public class User {
                    
                }
         	   
-        	   System.out.println(firstname+lastname+emails.toString());
+        	   //System.out.println(firstname+lastname+emails.toString());
           }
     	
     }
@@ -152,10 +152,18 @@ public class User {
     public void updateUserDetails(String username,String firstname, String surname, Set<String> email, String address){
     	
     	
-    	
+    	String queryUpdate;
     	
     	Session session = cluster.connect ("instagrim");
-    	String queryUpdate="update userprofiles SET first_name=?, last_name=?, email = email+? where login=?";
+    	
+    	if(email.isEmpty())
+    	{
+    		 System.out.println("EMAIL IN UPDATE EMPTY SET");
+    		 queryUpdate="update userprofiles SET first_name=?, last_name=? where login=?";
+    	}
+    	
+    	
+    	queryUpdate="update userprofiles SET first_name=?, last_name=?, email = email+? where login=?";
     	PreparedStatement ps= session.prepare(queryUpdate);
     	
     	BoundStatement boundStatement = new BoundStatement(ps);

@@ -53,7 +53,34 @@ public class PicModel {
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
+    public void insertProfilePic(byte[] b, String type, String name, String user) throws IOException{
+    	Convertors convertor= new Convertors();
+    	String types[]=Convertors.SplitFiletype(type);
+    	
+    	int length = b.length;
+    	java.util.UUID picid= convertor.getTimeUUID();
+    	
+    	Boolean success= (new File("/var/tmp/instagrim/")).mkdirs();
+    	FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/"+picid));
+    	
+    	output.write(b);
+    	
+    	byte []  thumbb = picresize(picid.toString(),types[1]);
+        int thumblength= thumbb.length;
+        ByteBuffer thumbbuf=ByteBuffer.wrap(thumbb);
+        Session session = cluster.connect("instagrim");
 
+        PreparedStatement psInsertProfilePic = session.prepare("insert into profilePics ( picid,thumb, user, interaction_time,thumblength,type,name) values(?,?,?,?,?,?,?)");
+        PreparedStatement psInsertProfilePicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
+        BoundStatement bsInsertPic = new BoundStatement(psInsertProfilePic);
+        BoundStatement bsInsertPicToUser = new BoundStatement(psInsertProfilePicToUser);
+
+        Date DateAdded = new Date();
+        session.execute(bsInsertPic.bind(picid, thumbbuf, user, DateAdded,thumblength, type, name));
+        session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
+        session.close();
+    	
+    }
     public void insertPic(byte[] b, String type, String name, String user) {
         try {
             Convertors convertor = new Convertors();
@@ -188,6 +215,51 @@ public class PicModel {
             }
         }
         return Pics;
+    }
+    
+    public Pic getProfilePicofUser(String user){
+    	Session session = cluster.connect("instagrim");
+        ByteBuffer bImage = null;
+        String type = null;
+        int length = 0;
+        java.util.UUID uuid=null;
+    	
+    	try{
+    		ResultSet rs=null;
+    		PreparedStatement ps=null;
+    		
+    		ps= session.prepare("select picid,thumb, thumblength,type, picid from profilePics where user=?");
+    		
+    		BoundStatement boundStatement = new BoundStatement(ps);
+    		rs= session.execute(boundStatement.bind(user));
+    		
+    		   if (rs.isExhausted()) {
+                   System.out.println("No Images returned");
+                   return null;
+               } else {
+                   for (Row row : rs) {
+                      
+                      
+                           bImage = row.getBytes("thumb");
+                           length = row.getInt("thumblength");
+                           uuid= row.getUUID("picid");
+                           type = row.getString("type");
+
+                   }
+               }
+    	}
+     catch (Exception et) {
+        System.out.println("Can't get Profile Pic" + et);
+        return null;
+    }
+    	
+    	 session.close();
+         Pic p = new Pic();
+         p.setPic(bImage, length, type);
+         p.setUUID(uuid);
+
+         return p;
+		
     }
 
     public Pic getPic(int image_type, java.util.UUID picid) {

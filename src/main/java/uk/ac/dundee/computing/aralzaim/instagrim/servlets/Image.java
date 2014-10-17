@@ -45,10 +45,9 @@ import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
     "/Images",
     "/Images/*",
     "/Delete/*",
-    "/Slideshow",
-    "/Slideshow/*",
-    "/Alter/",
-    "/Alter/*"
+    "/OrginalImage/",
+    "/OrginalImage/*"
+  
 })
 @MultipartConfig
 
@@ -70,8 +69,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
         CommandsMap.put("Delete", 4);
-        CommandsMap.put("Slideshow", 5);
-        CommandsMap.put("Alter", 6);
+        CommandsMap.put("OrginalImage", 5);
 
     }
 
@@ -115,13 +113,11 @@ public class Image extends HttpServlet {
             case 4:
             	DeleteImage(username,args[2], request, response);
             	break;
-            case 5:
-            	SlideShow(username,request,response);
-                break;
+         
             
-            case 6: 
+            case 5: 
             	
-            	AlterImage(username, args[2],request,response);
+            	DisplayImage(Convertors.DISPLAY_IMAGE, args[2], response);
                 
             default:
                 error("Bad Operator", response);
@@ -133,41 +129,9 @@ public class Image extends HttpServlet {
         }
     }
 
-    private void AlterImage(String username, String picid, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-    	
-    	PicModel pm= new PicModel();
-    	Pic pic = null;
-    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   	
-    	   Iterator<Pic> iterator;
-           iterator = lsPics.iterator();
-           while (iterator.hasNext()) {
-               Pic p = (Pic) iterator.next();
-               if(p.getSUUID().toString().equals(picid)){
-            	   
-            	   System.out.println("Found the picture to alter");
-            	   pic=p;
-               }
-              
-    	
-           }
-    	
-    	RequestDispatcher rd= request.getRequestDispatcher("/alter.jsp");
-    	request.setAttribute("Pic", pic);
-    	rd.forward(request,response);
-	}
 
-	private void SlideShow(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException{
-    	
-    	PicModel pm = new PicModel();
-    	pm.setCluster(cluster);
-    	java.util.LinkedList<Pic> lsPics = pm.getPicsForUser(username) ;   
-    	
-    	RequestDispatcher rd= request.getRequestDispatcher("/slideshow.jsp");
-    	request.setAttribute("Pics", lsPics);
-    	
-    	rd.forward(request,response);
-	}
+
+	
 
 	private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();

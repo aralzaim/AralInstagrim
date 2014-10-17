@@ -31,6 +31,11 @@
                 <ul>
                     <li>User Name <input type="text" name="username"></li>
                     <li>Password <input type="password" name="password"></li>
+                    <%if(request.getAttribute("errorMessage")!=null){
+                   %>
+                   <%=request.getAttribute("errorMessage")  %>
+                   <%} %>
+                    
                 </ul>
                 <br/>
                 <input type="submit" value="Login"> 
