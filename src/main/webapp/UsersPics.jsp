@@ -56,6 +56,12 @@
         %>
         <div id="showingpictures" align="center">
         <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> <br/>
+         <form method = "POST"  action="/Instagrim/Comment">
+         <%=p.getComments() %> </br>
+        		Add Comment!<input type="text" name="comment"></br>
+        		<input type="text" hidden="true" name="picid" value="<%=p.getSUUID()%>">
+        		<input type="submit" value="Add"></br></br>
+        		</form>
         <a href="/Instagrim/OrginalImage/<%=p.getSUUID()%>">Orginal Image   </a>
     	<a href="/Instagrim/Delete/<%=p.getSUUID()%>" onclick="return confirm('You are about to delete a picture!')">Delete Image</a>
         </div>

@@ -33,11 +33,22 @@
         <h2>Hello <%= us.getFirstname() %> !</h2>
         	<h3>Edit your profile</h3>
         	
+        	<%
+        		PicModel tm = new PicModel();
+        		if(null==tm.getPicsForUser(us.getUsername())){
+        		Pic p= tm.getProfilePicofUser(us.getUsername());
+        		
+        		System.out.println(p);
+        		%>
+        		<p align="center"><img src="/Instagrim/Thumb/<%=p.getSUUID() %>" width="%50" height="%50" name="slide" /></p>
+        		
+        		<%} %>
+        	
         	
         	
         	<form method = "POST" enctype="multipart/form-data" action="/Instagrim/ProfPicture">
         		Change Profile Picture: <input type="file" name="profilepic"></br>
-        		<input type="submit" value="Change">
+        		<input type="submit" value="Change"></br></br>
         		</form>
         	
         	<form method = "POST"  action= "Profile">
@@ -47,14 +58,14 @@
         	Current E-mail(s) : 
         	  
         	  <%=us.getEmails().toString()%>
-        		<%}}%>
+        		
         		 </br>
         		
 			Want to add E-mail?: <input type="text" name="email"></br>
         	Address: <input type="text" name="address"></br>
         	<input type="submit" value="Done">
         	</form>
-        	
+        	<%}}%>
         	
         </article>
         

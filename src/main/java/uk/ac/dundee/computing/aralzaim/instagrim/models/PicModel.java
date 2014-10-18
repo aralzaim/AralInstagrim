@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -53,10 +55,28 @@ public class PicModel {
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
+    
+    
+    public void insertComments(String picId, Set<String> comments) {
+    	
+    	Session session= CassandraHosts.getCluster().connect("instagrim");
+    	java.util.UUID picid = java.util.UUID.fromString(picId);
+    	String queryInsertComments="update pics SET comment=comment+? where picid=?";
+    	
+    	PreparedStatement psInsertComment=null;
+    	BoundStatement bsInsertComment=null;
+    	psInsertComment=session.prepare(queryInsertComments);
+    	bsInsertComment= new BoundStatement(psInsertComment);
+    	session.execute(bsInsertComment.bind(comments,picid));    	
+    	
+    	
+    }
+    
     public void insertProfilePic(byte[] b, String type, String name, String user) throws IOException{
     	Convertors convertor= new Convertors();
     	String types[]=Convertors.SplitFiletype(type);
-    	
+    	PreparedStatement psInsertProfilePic=null;
+    	BoundStatement bsInsertProfilePic=null;
     	int length = b.length;
     	java.util.UUID picid= convertor.getTimeUUID();
     	
@@ -69,15 +89,26 @@ public class PicModel {
         int thumblength= thumbb.length;
         ByteBuffer thumbbuf=ByteBuffer.wrap(thumbb);
         Session session = cluster.connect("instagrim");
-
-        PreparedStatement psInsertProfilePic = session.prepare("insert into profilePics ( picid,thumb, user, interaction_time,thumblength,type,name) values(?,?,?,?,?,?,?)");
-        PreparedStatement psInsertProfilePicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
-        BoundStatement bsInsertPic = new BoundStatement(psInsertProfilePic);
-        BoundStatement bsInsertPicToUser = new BoundStatement(psInsertProfilePicToUser);
-
+        
         Date DateAdded = new Date();
-        session.execute(bsInsertPic.bind(picid, thumbbuf, user, DateAdded,thumblength, type, name));
-        session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
+        
+  //     if(null==getPicsForUser(user)){
+
+    	  
+        psInsertProfilePic = session.prepare("insert into profilePics ( picid,thumb, user, interaction_time,thumblength,type,name) values(?,?,?,?,?,?,?)");
+        bsInsertProfilePic = new BoundStatement(psInsertProfilePic);
+        
+        session.execute(bsInsertProfilePic.bind(picid, thumbbuf, user, DateAdded,thumblength, type, name));
+   //    }
+       
+   //    else{
+    	   
+   // 	   System.out.println("UPDATE");
+   // 	   psInsertProfilePic=session.prepare("update profilepics SET picid=?, thumb=?, interaction_time=?,thumblength=?,type=?,name=?  where login=?");
+    	   
+   //        session.execute(bsInsertProfilePic.bind(picid, thumbbuf, DateAdded,thumblength, type, name,user));
+   //    }
+        
         session.close();
     	
     }
@@ -192,24 +223,42 @@ public class PicModel {
         return pad(img, 4);
     }
    
-    public java.util.LinkedList<Pic> getPicsForUser(String User) {
+    public java.util.LinkedList<Pic> getPicsForUser(String user) {
+    	 java.util.UUID picid=null;
+    	 Set comments =null;
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
-    	Session session = CassandraHosts.getCluster().connect("instagrim");
+    	Session session = CassandraHosts.getCluster().connect("instagrim");    	
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
+        ResultSet rs2 = null;
+        
+        
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        User));
+                        user));
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
         } else {
             for (Row row : rs) {
                 Pic pic = new Pic();
-                java.util.UUID UUID = row.getUUID("picid");
-                System.out.println("UUID" + UUID.toString());
-                pic.setUUID(UUID);
+               picid = row.getUUID("picid");
+               
+                System.out.println("UUID - " + picid.toString());
+                
+                
+                PreparedStatement ps2= session.prepare("select comment from pics where picid=?");
+                BoundStatement boundStatement2 = new BoundStatement(ps2);
+                rs2 = session.execute(boundStatement2.bind(picid));
+                
+                for (Row row2 : rs2) {
+                comments=row2.getSet("comment",String.class);
+                System.out.println("Comments are: "+ comments.toString());
+                }
+                
+                pic.setComments(comments);
+                pic.setUUID(picid);
                 Pics.add(pic);
 
             }
@@ -218,7 +267,7 @@ public class PicModel {
     }
     
     public Pic getProfilePicofUser(String user){
-    	Session session = cluster.connect("instagrim");
+    	Session session = CassandraHosts.getCluster().connect("instagrim");
         ByteBuffer bImage = null;
         String type = null;
         int length = 0;

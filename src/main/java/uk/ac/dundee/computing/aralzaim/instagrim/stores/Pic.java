@@ -6,7 +6,10 @@
 package uk.ac.dundee.computing.aralzaim.instagrim.stores;
 
 import com.datastax.driver.core.utils.Bytes;
+
 import java.nio.ByteBuffer;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -15,6 +18,7 @@ import java.nio.ByteBuffer;
 public class Pic {
 
     private ByteBuffer bImage = null;
+    private Set comments =new HashSet<String>();
     private int length;
     private String type;
     private java.util.UUID UUID=null;
@@ -32,6 +36,15 @@ public class Pic {
         this.bImage = bImage;
         this.length = length;
         this.type=type;
+       
+    }
+    
+    public void setComments(Set<String> comments){
+    	this.comments=comments;
+    }
+    
+    public Set getComments(){
+    	return comments;
     }
 
     public ByteBuffer getBuffer() {

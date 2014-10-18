@@ -165,7 +165,9 @@ public class Image extends HttpServlet {
 
         response.setContentType(p.getType());
         response.setContentLength(p.getLength());
-        //out.write(Image);
+       
+        
+        
         InputStream is = new ByteArrayInputStream(p.getBytes());
         BufferedInputStream input = new BufferedInputStream(is);
         byte[] buffer = new byte[8192];

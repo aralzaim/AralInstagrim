@@ -21,6 +21,7 @@ import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
 
 @WebServlet(urlPatterns = {
 	    "/ProfPicture",
@@ -47,6 +48,8 @@ public class ProfPicture extends HttpServlet {
 	        User user= lg.getUser();
 	        String username=user.getUsername();
 	        
+	        Pic profile=null;
+	        
 			  for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
       	  System.out.println("PROFIL FOTOSU DEGISECEK");
@@ -70,8 +73,12 @@ public class ProfPicture extends HttpServlet {
                 PicModel tm = new PicModel();
                 tm.setCluster(cluster);
                 System.out.println("HERE" + b);
-                tm.insertProfilePic(b, type, filename, username);
                 
+              profile=tm.getProfilePicofUser(username);
+              
+            
+                tm.insertProfilePic(b, type, filename, username);
+             
 
                 is.close();
             }
