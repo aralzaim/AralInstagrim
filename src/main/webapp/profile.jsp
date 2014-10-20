@@ -35,14 +35,14 @@
         	
         	<%
         		PicModel tm = new PicModel();
-        		if(null==tm.getPicsForUser(us.getUsername())){
-        		Pic p= tm.getProfilePicofUser(us.getUsername());
         		
+        		Pic p= tm.getProfilePicofUser(us.getUsername());
+        		if(p!=null){
         		System.out.println(p);
         		%>
-        		<p align="center"><img src="/Instagrim/Thumb/<%=p.getSUUID() %>" width="%50" height="%50" name="slide" /></p>
+        		<p align="center"><img src="/Instagrim/ProfilePicture/<%=p.getSUUID() %>"/></p>
         		
-        		<%} %>
+        		<%}%>
         	
         	
         	

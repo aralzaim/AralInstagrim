@@ -46,7 +46,9 @@ import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
     "/Images/*",
     "/Delete/*",
     "/OrginalImage/",
-    "/OrginalImage/*"
+    "/OrginalImage/*",
+    "/ProfilePicture/",
+    "/ProfilePicture/*"
   
 })
 @MultipartConfig
@@ -70,6 +72,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("Thumb", 3);
         CommandsMap.put("Delete", 4);
         CommandsMap.put("OrginalImage", 5);
+        CommandsMap.put("ProfilePicture", 6);
 
     }
 
@@ -89,6 +92,7 @@ public class Image extends HttpServlet {
         String args[] = Convertors.SplitRequestPath(request);
         HttpSession session=request.getSession();
         LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
+        if(lg!=null){
         User us=lg.getUser();
         String username= us.getUsername();
         
@@ -102,36 +106,66 @@ public class Image extends HttpServlet {
         }
         switch (command) {
             case 1:
-                DisplayImage(Convertors.DISPLAY_PROCESSED,args[2], response);
+
+    	        System.out.println("1");
+                DisplayImage(Convertors.DISPLAY_PROCESSED,args[2],request ,response);
                 break;
             case 2:
-                DisplayImageList(args[2], request, response);
+
+    	        System.out.println("2");
+                DisplayImageList(args[2], request ,response);
                 break;
             case 3:
-                DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
+
+    	        System.out.println("3");
+                DisplayImage(Convertors.DISPLAY_THUMB,args[2],request , response);
                 break;
             case 4:
+
+    	        System.out.println("4");
             	DeleteImage(username,args[2], request, response);
             	break;
-         
-            
             case 5: 
-            	
-            	DisplayImage(Convertors.DISPLAY_IMAGE, args[2], response);
+
+    	        System.out.println("5");
+            	DisplayImage(Convertors.DISPLAY_IMAGE, args[2],request, response);
+                break;
                 
+            case 6: 
+
+    	        System.out.println("DisplayProfilePicture!");
+            	DisplayProfilePicture(Convertors.DISPLAY_THUMB,args[2],request,response);
+            	break;
             default:
                 error("Bad Operator", response);
                 
                 
-                
+               
                 response.sendRedirect("/Instagrim/Profile/"+username);
                 
         }
-    }
+        }}
 
 
 
-	
+	private void DisplayProfilePicture(int dISPLAY_THUMB, String string,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		 	
+			PicModel tm = new PicModel();
+	        tm.setCluster(cluster);
+	        HttpSession session= request.getSession();
+	       
+	        LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
+	        if(lg!=null){
+	        User user= lg.getUser();Pic p=tm.getProfilePicofUser(user.getUsername());
+	        
+	        System.out.println("DisplayProfilePicture!");
+	        
+	        showImage(p, response);
+	        
+	        }
+	        
+	}
 
 	private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
@@ -152,16 +186,35 @@ public class Image extends HttpServlet {
     }
    
  
-
+    
    
-   private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
+   private void DisplayImage(int type,String Image, HttpServletRequest request ,HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-  
+        HttpSession session= request.getSession();
+       
+        LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
+        if(lg!=null){
+        User user= lg.getUser();
         
+       
+      //NEED NEW FUNCTION FOR DISPALY PROFILE PICTURE  
         Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
         
-        OutputStream out = response.getOutputStream();
+     //   Pic p=tm.getProfilePicofUser(user.getUsername());
+        
+        showImage(p,response);
+        
+        
+        }
+        
+       
+    }
+
+    private void showImage(Pic p,HttpServletResponse response) throws IOException {
+    	 OutputStream out=null;
+    	 
+    	 out = response.getOutputStream();
 
         response.setContentType(p.getType());
         response.setContentLength(p.getLength());
@@ -175,9 +228,10 @@ public class Image extends HttpServlet {
             out.write(buffer, 0, length);
         }
         out.close();
-    }
+	
+}
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
 
