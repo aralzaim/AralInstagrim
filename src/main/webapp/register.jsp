@@ -13,41 +13,41 @@
         <link rel="stylesheet" type="text/css" href="Styles.css" />
     </head>
     <body>
+    	<div id="wrapper" align="center">
+        <div id="header">
         <header>
         <h1>InstaGrim ! </h1>
         <h2>Your world in Black and White</h2>
         </header>
-        <nav>
-            <ul>
-                
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
-            </ul>
-        </nav>
+        </div>
+
        
-        <article>
+     	<div id="content">
             <h3>Register as user</h3>
             <form method="POST"  action="Register">
                 <ul>
-                    <li>User Name: <input type="text" name="username"></li> 
-                    <li>Password: <input type="password" name="password"></li>
-                    <li>First Name: <input type="text" name="firstname"></li>
-                    <li>Last Name: <input type="text" name="lastname"></li>
-                    <li>Address: <input type="text" name="address"></li>
-                    <li>E-Mail: <input type="text" name="email"></li>
+                 <input type="text" name="username" placeholder="Username"></br>
+                 <input type="password" name="password" placeholder="Password"></br>
+                 <input type="text" name="firstname" placeholder="First Name"></br>
+                 <input type="text" name="lastname" placeholder="Last Name"></br>
+                 <input type="text" name="address" placeholder="Address"></br>
+                 <input type="text" name="email" placeholder="E-Mail"></br>
                 </ul>
                 <br/>
                 <input type="submit" value="Register"> 
             </form>
-
-        </article>
-        
+		</div>
+      
+        <div id="footer">
         <footer>
-        <div align="center">
+       
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
             </ul>
             
-         </div>
         </footer>
+        
+         </div>
+        </div>
     </body>
 </html>

@@ -154,7 +154,7 @@ public class Image extends HttpServlet {
 			PicModel tm = new PicModel();
 	        tm.setCluster(cluster);
 	        HttpSession session= request.getSession();
-	       
+	       try{
 	        LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
 	        if(lg!=null){
 	        User user= lg.getUser();Pic p=tm.getProfilePicofUser(user.getUsername());
@@ -164,7 +164,10 @@ public class Image extends HttpServlet {
 	        showImage(p, response);
 	        
 	        }
-	        
+	       }
+	       catch(Exception e){
+	    	   System.out.println("Error in Display profile picture.");
+	       }
 	}
 
 	private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -192,7 +195,7 @@ public class Image extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         HttpSession session= request.getSession();
-       
+       try{
         LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
         if(lg!=null){
         User user= lg.getUser();
@@ -205,15 +208,17 @@ public class Image extends HttpServlet {
         
         showImage(p,response);
         
-        
         }
-        
+        }
+       catch(Exception e){
+    	   System.out.println("Error Display Image.");
+       }
        
     }
 
     private void showImage(Pic p,HttpServletResponse response) throws IOException {
     	 OutputStream out=null;
-    	 
+    	 try{
     	 out = response.getOutputStream();
 
         response.setContentType(p.getType());
@@ -226,13 +231,17 @@ public class Image extends HttpServlet {
         byte[] buffer = new byte[8192];
         for (int length = 0; (length = input.read(buffer)) > 0;) {
             out.write(buffer, 0, length);
-        }
+        }}
+    	  catch(Exception e){
+	    	   System.out.println("Error in show image function.");
+	       }
         out.close();
 	
 }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        for (Part part : request.getParts()) {
+       try{
+		for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
 
             String type = part.getContentType();
@@ -261,7 +270,10 @@ public class Image extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
              rd.forward(request, response);
         }
-
+       }
+       catch(Exception e){
+    	   System.out.println("Exception in doPostImage");
+       }
     }
 
     private void error(String mess, HttpServletResponse response) throws ServletException, IOException {

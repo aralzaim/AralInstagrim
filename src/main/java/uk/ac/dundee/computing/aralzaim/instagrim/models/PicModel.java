@@ -59,6 +59,7 @@ public class PicModel {
     
     public void insertComments(String picId, Set<String> comments) {
     	
+    	try{
     	Session session= CassandraHosts.getCluster().connect("instagrim");
     	java.util.UUID picid = java.util.UUID.fromString(picId);
     	String queryInsertComments="update pics SET comment=comment+? where picid=?";
@@ -68,11 +69,16 @@ public class PicModel {
     	psInsertComment=session.prepare(queryInsertComments);
     	bsInsertComment= new BoundStatement(psInsertComment);
     	session.execute(bsInsertComment.bind(comments,picid));    	
-    	
+    	}
+    	catch(Exception e){
+    		
+    	}
     	
     }
     
     public void insertProfilePic(byte[] b, String type, String name, String user) throws IOException{
+    	
+    	try{
     	Convertors convertor= new Convertors();
     	String types[]=Convertors.SplitFiletype(type);
     	PreparedStatement psInsertProfilePic=null;
@@ -108,9 +114,13 @@ public class PicModel {
     	   
    //        session.execute(bsInsertProfilePic.bind(picid, thumbbuf, DateAdded,thumblength, type, name,user));
    //    }
-        
+
         session.close();
     	
+    	}
+    	catch(Exception e){
+    		
+    	}
     }
     public void insertPic(byte[] b, String type, String name, String user) {
         try {
@@ -119,6 +129,7 @@ public class PicModel {
             String types[]=Convertors.SplitFiletype(type);
             ByteBuffer buffer = ByteBuffer.wrap(b);
             int length = b.length;
+          
             java.util.UUID picid = convertor.getTimeUUID();
             
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
@@ -156,7 +167,7 @@ public class PicModel {
     	
     	
     	java.util.UUID uuid=java.util.UUID.fromString(picid);
-    	
+    	try{
     	System.out.println("I am here!"+uuid);
     	
     	String queryDeletePic="DELETE FROM instagrim.pics WHERE picid=?";
@@ -174,7 +185,10 @@ public class PicModel {
      	
     	session.execute(bsDeletePic.bind(uuid));
     	session.execute(bsDeletePicToUser.bind(uuid));
-    	
+    	}
+    	catch(Exception e){
+    		
+    	}
    
     }
 
@@ -224,15 +238,16 @@ public class PicModel {
     }
    
     public java.util.LinkedList<Pic> getPicsForUser(String user) {
-    	 java.util.UUID picid=null;
-    	 Set comments =null;
-        java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
+    	java.util.UUID picid=null;
+    	Set comments =null;
+        String owner=null;
+    	java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
     	Session session = CassandraHosts.getCluster().connect("instagrim");    	
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
         ResultSet rs2 = null;
         
-        
+        try{
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
@@ -248,20 +263,27 @@ public class PicModel {
                 System.out.println("UUID - " + picid.toString());
                 
                 
-                PreparedStatement ps2= session.prepare("select comment from pics where picid=?");
+                PreparedStatement ps2= session.prepare("select comment, user from pics where picid=?");
                 BoundStatement boundStatement2 = new BoundStatement(ps2);
                 rs2 = session.execute(boundStatement2.bind(picid));
                 
                 for (Row row2 : rs2) {
                 comments=row2.getSet("comment",String.class);
-                System.out.println("Comments are: "+ comments.toString());
-                }
+                owner=row2.getString("user");
                 
+                System.out.println("Comments are: "+ comments.toString());
+                
+                }
+                pic.setOwner(owner);
                 pic.setComments(comments);
                 pic.setUUID(picid);
                 Pics.add(pic);
-
-            }
+            }}}
+            catch(Exception et) {
+                System.out.println("Can't get Profile Pic" + et);
+                return null;
+            
+            
         }
         return Pics;
     }

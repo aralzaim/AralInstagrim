@@ -51,6 +51,7 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    	try{
     	User us=new User();
         String username=request.getParameter("username");
         String password=request.getParameter("password");
@@ -87,7 +88,10 @@ public class Login extends HttpServlet {
         	 RequestDispatcher rd=request.getRequestDispatcher("login.jsp");
              request.setAttribute("errorMessage", "Username or password is invalid!");
              rd.forward(request,response);
-        }
+        }}
+    	  catch(Exception e){
+	    	   System.out.println("Error in doPostLogin");
+	       }
         
     }
 

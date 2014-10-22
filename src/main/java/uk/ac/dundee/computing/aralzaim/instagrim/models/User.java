@@ -86,6 +86,7 @@ public class User {
     
     public boolean checkEmailExist(String username, String email){
 		
+    	try{
     	Session session= cluster.connect("instagrim");
     	String queryEmailList="select email from userprofiles where login=?";
     	
@@ -111,6 +112,9 @@ public class User {
     		}
     		else
     		return true;
+    	}}
+    	catch(Exception e){
+    		
     	}
 		return true;
     	
@@ -120,6 +124,7 @@ public class User {
     
     public void fetchUserDetailsfromDB(String username){
     	
+    	try{
     	Session session= cluster.connect("instagrim");
     	String querySelect="select * from userprofiles where login=?";
     	
@@ -147,12 +152,16 @@ public class User {
         	   
         	   //System.out.println(firstname+lastname+emails.toString());
           }
+    	}
+    	catch(Exception e){
+    		System.out.println("Error fetching user details from database");
+    	}
     	
     }
     
     public void updateUserDetails(String username,String firstname, String surname, Set<String> email, String address){
     	
-    	
+    	try{
     	String queryUpdate;
     	
     	Session session = cluster.connect ("instagrim");
@@ -170,9 +179,10 @@ public class User {
     	BoundStatement boundStatement = new BoundStatement(ps);
     	
     	session.execute(boundStatement.bind(firstname,surname, email, username));
-    	
-    	System.out.println("after execute");
-    	
+    	}
+    	catch(Exception e){
+    	System.out.println("Error in updating user details");
+    	}
     }
     
     public boolean RegisterUser(String username, String password,String firstname,String lastname,Set <String> email, String address){

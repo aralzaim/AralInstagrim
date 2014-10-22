@@ -37,6 +37,8 @@ public class Comment extends HttpServlet{
 	
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException{
 	  
+		  try{
+			
 		 HttpSession session=request.getSession();
 	     LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
 	     User user = lg.getUser();
@@ -58,9 +60,15 @@ public class Comment extends HttpServlet{
 		  pm.insertComments(picId, comments);
 		  
 		  
+		 
+		  
+		 
 		  
 		  response.sendRedirect("/Instagrim/Images/"+username);
-		  
+		  }
+		  catch(Exception e){
+			  System.out.println("Error in Comment.java");
+		  }
 	  
 	  }
 	  

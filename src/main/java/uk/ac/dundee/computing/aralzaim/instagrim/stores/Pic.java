@@ -22,6 +22,7 @@ public class Pic {
     private int length;
     private String type;
     private java.util.UUID UUID=null;
+    private String owner=null;
     
     public void Pic() {
 
@@ -37,6 +38,12 @@ public class Pic {
         this.length = length;
         this.type=type;
        
+    }
+   public String getOwner() {
+	return owner;
+}
+    public void setOwner(String owner){
+    	this.owner=owner;
     }
     
     public void setComments(Set<String> comments){
@@ -64,5 +71,6 @@ public class Pic {
         byte image[] = Bytes.getArray(bImage);
         return image;
     }
+   
 
 }

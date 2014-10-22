@@ -11,36 +11,39 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
-
     </head>
     <body>
+     <div id="wrapper" align="center">
+     	<div id="header">
         <header>
         <h1>InstaGrim ! </h1>
         <h2>Your world in Black and White</h2>
+        <h3>Login</h3>
         </header>
-  
-       
-        <article>
-            <h3>Login</h3>
-            <form method="POST"  action="Login">
-                <ul>
-                    <li>User Name <input type="text" name="username"></li>
-                    <li>Password <input type="password" name="password"></li>
+        </div>
+        
+        <div id="content">
+        	<form method="POST"  action="Login">
+              
+                    <input type="text" name="username" placeholder="Username"></br>
+                  
+                    <input type="password" name="password" placeholder="Password"></br>
                     <%if(request.getAttribute("errorMessage")!=null){
                    %>
                    <%=request.getAttribute("errorMessage")  %>
                    <%} %>
-                    
-                </ul>
-                <br/>
+              
                 <input type="submit" value="Login"> 
             </form>
 
-        </article>
+       </div>
+        <div id="footer">
         <footer>
-            <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
-            </ul>
+           
+              <a href="/Instagrim">Home</a></li>
+          
         </footer>
+        </div>
+        </div>
     </body>
 </html>
