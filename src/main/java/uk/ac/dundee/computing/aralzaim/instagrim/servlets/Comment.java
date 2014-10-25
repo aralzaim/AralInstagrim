@@ -1,5 +1,10 @@
-package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
+/**
+ * 
+ * @author aralzaim
+ * @since 25/10/2014
+ */
 
+package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,9 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aralzaim.instagrim.models.CommentModel;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
 
 import com.datastax.driver.core.Cluster;
 
@@ -26,7 +33,8 @@ import com.datastax.driver.core.Cluster;
 	})
 
 public class Comment extends HttpServlet{
-	PicModel pm= new PicModel();
+		
+
 	private Cluster cluster;
 	
 	  public void init(ServletConfig config) throws ServletException {
@@ -38,33 +46,30 @@ public class Comment extends HttpServlet{
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException{
 	  
 		  try{
-			
+			System.out.println("inside of comments");
 		 HttpSession session=request.getSession();
+		 CommentModel cm= new CommentModel();
 	     LoggedIn lg= (LoggedIn) session.getAttribute("LoggedIn");
 	     User user = lg.getUser();
 	     String username = user.getUsername();
 	    
-	      
-	      
-		 PicModel pm= new PicModel();
-		 String comment = request.getParameter("comment");
+	     String ownerofpic=request.getParameter("owner");
+	     String comment = request.getParameter("comment");
 		 String picId = request.getParameter("picid");
 		
-		  Set comments =new HashSet<String>();
-		  if(!comment.equals("")){
+		
+		  if(!comment.equals(null)){
 		 
-			  System.out.println("NOT EMPTY"+ comments.toString());
-			  comments.add(comment);
+			
+		  
+		  cm.insertComments(picId, comment,username);
 		  }
 		  
-		  pm.insertComments(picId, comments);
-		  
-		  
 		 
-		  
 		 
+		 System.out.println(request.getRequestURI());
 		  
-		  response.sendRedirect("/Instagrim/Images/"+username);
+		  response.sendRedirect("/Instagrim/Images/"+ownerofpic);
 		  }
 		  catch(Exception e){
 			  System.out.println("Error in Comment.java");

@@ -1,3 +1,9 @@
+/**
+ * 
+ * @author aralzaim
+ * @since 25/10/2014
+ */
+
 package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -97,6 +103,7 @@ public class Image extends HttpServlet {
         String username= us.getUsername();
         
         
+        
         int command;
         try {
             command = (Integer) CommandsMap.get(args[1]);
@@ -170,11 +177,12 @@ public class Image extends HttpServlet {
 	       }
 	}
 
-	private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void DisplayImageList(String owner, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
+        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(owner);
         RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
+        request.setAttribute("ProfileOwner", owner);
         request.setAttribute("Pics", lsPics);
         rd.forward(request, response);
 

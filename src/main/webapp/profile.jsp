@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
     <%@page import="uk.ac.dundee.computing.aralzaim.instagrim.stores.*" %>
         <%@page import="uk.ac.dundee.computing.aralzaim.instagrim.models.*" %>
@@ -32,7 +31,7 @@
                             	
                     %>
         
-        <h2>Hello <%= us.getFirstname() %> !</h2>
+        <h2>Hello ${LoggedIn.user.firstname} !</h2>
         	<h3>Edit your profile</h3>
         	
         	<%
@@ -55,12 +54,12 @@
         		</form>
         	
         		<form method = "POST"  action= "Profile">
-        		<p>User Name</p> <input type="text" name="username" readonly="readonly" value="<%=us.getUsername()%>">
-        		<p>First Name</p><input type="text" name="firstname" value="<%=us.getFirstname()%>">
-        		<p>Last Name</p> <input type="text" name="lastname" value="<%=us.getLastname()%>">
+        		<p>User Name</p> <input type="text" name="username" readonly="readonly" value="${LoggedIn.user.username}">
+        		<p>First Name</p><input type="text" name="firstname" value="${LoggedIn.user.firstname}">
+        		<p>Last Name</p> <input type="text" name="lastname" value="${LoggedIn.user.lastname}">
         		<p>Current E-mail(s)</p> 
         	 
-        	 <p> <%=us.getEmails().toString()%> </p>
+        	 <p> ${LoggedIn.user.emails} </p>
         		
         		 </br>
         		

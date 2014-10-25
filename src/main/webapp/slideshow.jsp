@@ -11,8 +11,8 @@
 <title>Slide Show</title>
 </head>
 <body>
-
-<h2 align="center">Slide Show with your Pictures</h2>
+<div id="wrapper" align="center">
+<h2 align="center">Slide Show</h2>
 	
 <%
 			java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
@@ -21,7 +21,7 @@
             	
             	
         %> 
-<p align="center">
+
 <%
         } else {
         	%>
@@ -69,17 +69,13 @@
  		
   
        <% } %>
- </p>
          <footer>
-               
-          <div align="center">
-          <li class="nav"><a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></li>
-
-             
-                <li class="footer"><a href="/Instagrim">Home</a></li>
-            	</div>
+         
+         <a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
+		  <a href="/Instagrim">Home</a>
+            	
                 
         </footer>
-      
+      </div>
 </body>
 </html>

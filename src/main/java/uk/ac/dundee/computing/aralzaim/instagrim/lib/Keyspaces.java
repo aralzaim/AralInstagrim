@@ -28,7 +28,6 @@ public final class Keyspaces {
                     + "  processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
-                    +"comment set<text>,"
                     + " PRIMARY KEY (picid)"
                     + ")";
             String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
@@ -51,7 +50,6 @@ public final class Keyspaces {
                     + "      addresses  map<text, frozen <address>>\n"
                     + "  );";
             
-            String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON instagrim.userpiclist (user);";
             
             String CreateUserProfilePic="CREATE TABLE if not exists instagrim.profilePics ("
                     + " user varchar,"
@@ -63,6 +61,20 @@ public final class Keyspaces {
                     + " name  varchar,"
                     + " PRIMARY KEY (user)"
                     + ")";
+            
+            String CreateComment="CREATE TABLE if not exists instagrim.comments("
+            		+"commentid uuid,"
+            		+"comment varchar,"
+            		+"picid uuid,"
+            		+"user varchar,"
+            		+"commentadded timestamp,"
+            		+"PRIMARY KEY (commentid, commentadded))"
+            		+ "WITH CLUSTERING ORDER BY (commentadded desc);";
+            
+            String  createCommentIndex="CREATE INDEX if not exists commentindex on instagrim.comments(picid)";
+            
+            
+            String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON instagrim.userpiclist (user);";
             
             Session session = c.connect();
             try {
@@ -122,7 +134,21 @@ public final class Keyspaces {
                 SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfilePic);
                 session.execute(cqlQuery);
             } catch (Exception et) {
-                System.out.println("Can't create user profile pic list index " + et);
+                System.out.println("Can't create user profile pic list index " + et);    
+            }
+            
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateComment);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create comment tablee index " + et);
+            }
+            
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(createCommentIndex);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't crete comment index index " + et);
             }
             
             session.close();
@@ -130,6 +156,9 @@ public final class Keyspaces {
         } catch (Exception et) {
             System.out.println("Other keyspace or coulm definition error" + et);
         }
+        
+    
+        
 
     }
 }

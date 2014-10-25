@@ -1,9 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @author aralzaim
+ * @since 25/10/2014
  */
-
 package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -24,10 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 
-/**
- *
- * @author Administrator
- */
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
     

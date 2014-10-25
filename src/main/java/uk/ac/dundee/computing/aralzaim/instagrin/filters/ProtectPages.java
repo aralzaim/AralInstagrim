@@ -25,10 +25,6 @@ import javax.servlet.http.HttpSession;
 
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
 
-/**
- *
- * @author Administrator
- */
 @WebFilter(filterName = "ProtectPages", urlPatterns = {"/upload.jsp"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE})
 public class ProtectPages implements Filter {
     

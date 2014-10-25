@@ -1,10 +1,8 @@
-/*
-
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @author aralzaim
+ * @since 25/10/2014
  */
-
 package uk.ac.dundee.computing.aralzaim.instagrim.models;
 
 import com.datastax.driver.core.BoundStatement;
@@ -25,10 +23,6 @@ import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
 
-/**
- *
- * @author Administrator
- */
 public class User {
 	
 	String username;
@@ -95,7 +89,7 @@ public class User {
     	BoundStatement boundStatement =new BoundStatement(ps);
     	
     	ResultSet rs = session.execute(boundStatement.bind(username));
-    	
+    	session.close();
     	if(rs==null){
     		System.out.println("Error in checking email existing");
     	}
@@ -133,7 +127,7 @@ public class User {
     	BoundStatement boundStatement = new BoundStatement(ps);
     	
     	ResultSet rs= session.execute(boundStatement.bind(username));
-    	
+    	session.close();
     	  if (rs==null) {
               System.out.println("Error in Fetching user details");
             
@@ -179,6 +173,7 @@ public class User {
     	BoundStatement boundStatement = new BoundStatement(ps);
     	
     	session.execute(boundStatement.bind(firstname,surname, email, username));
+    	session.close();
     	}
     	catch(Exception e){
     	System.out.println("Error in updating user details");
@@ -205,6 +200,7 @@ public class User {
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username,encodedPassword,firstname,lastname,email));
+        session.close();
         System.out.println("after execute");
         //We are assuming this always works.  Also a transaction would be good here !
         
@@ -227,6 +223,7 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
+        session.close();
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return false;

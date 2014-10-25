@@ -30,7 +30,7 @@
                     <input type="password" name="password" placeholder="Password"></br>
                     <%if(request.getAttribute("errorMessage")!=null){
                    %>
-                   <%=request.getAttribute("errorMessage")  %>
+                  <p> <%=request.getAttribute("errorMessage")  %></p>
                    <%} %>
               
                 <input type="submit" value="Login"> 

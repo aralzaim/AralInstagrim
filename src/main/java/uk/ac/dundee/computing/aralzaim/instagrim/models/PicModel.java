@@ -68,7 +68,8 @@ public class PicModel {
     	BoundStatement bsInsertComment=null;
     	psInsertComment=session.prepare(queryInsertComments);
     	bsInsertComment= new BoundStatement(psInsertComment);
-    	session.execute(bsInsertComment.bind(comments,picid));    	
+    	session.execute(bsInsertComment.bind(comments,picid));    
+    	session.close();
     	}
     	catch(Exception e){
     		
@@ -163,20 +164,32 @@ public class PicModel {
     public void deletePic(String username, String picid){
     	
     	Session session = CassandraHosts.getCluster().connect("instagrim");
-    	
+    	ResultSet rs=null;
+    	String owner;
     	
     	
     	java.util.UUID uuid=java.util.UUID.fromString(picid);
     	try{
-    	System.out.println("I am here!"+uuid);
+    		
+    	String getOwnerPic="select user from instagrim.pics where picid=?";	
+    	PreparedStatement psGetOwnerPic= session.prepare(getOwnerPic);
+    	BoundStatement bsGetOwnerPic= new BoundStatement (psGetOwnerPic);
+    	rs=session.execute(bsGetOwnerPic.bind(uuid));
+    	owner=rs.one().getString("user");
     	
+    	if(owner.equals(username))
+    	{
     	String queryDeletePic="DELETE FROM instagrim.pics WHERE picid=?";
     	String queryDeletePicToUser="DELETE FROM instagrim.userpiclist WHERE picid=?";
     	
     	
     	
+    	
+    	
     	PreparedStatement psDeletePic = session.prepare(queryDeletePic);
     	PreparedStatement psDeletePicToUser=session.prepare(queryDeletePicToUser);
+    	
+    	
     	
      	BoundStatement bsDeletePic=new BoundStatement(psDeletePic);
      	BoundStatement bsDeletePicToUser=new BoundStatement(psDeletePicToUser);
@@ -185,6 +198,10 @@ public class PicModel {
      	
     	session.execute(bsDeletePic.bind(uuid));
     	session.execute(bsDeletePicToUser.bind(uuid));
+    	
+    	}
+    	
+    	session.close();
     	}
     	catch(Exception e){
     		
@@ -239,19 +256,18 @@ public class PicModel {
    
     public java.util.LinkedList<Pic> getPicsForUser(String user) {
     	java.util.UUID picid=null;
-    	Set comments =null;
-        String owner=null;
+        String owner=user;
     	java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
     	Session session = CassandraHosts.getCluster().connect("instagrim");    	
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
-        ResultSet rs2 = null;
         
         try{
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         user));
+        session.close();
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
@@ -260,30 +276,18 @@ public class PicModel {
                 Pic pic = new Pic();
                picid = row.getUUID("picid");
                
+               
                 System.out.println("UUID - " + picid.toString());
                 
-                
-                PreparedStatement ps2= session.prepare("select comment, user from pics where picid=?");
-                BoundStatement boundStatement2 = new BoundStatement(ps2);
-                rs2 = session.execute(boundStatement2.bind(picid));
-                
-                for (Row row2 : rs2) {
-                comments=row2.getSet("comment",String.class);
-                owner=row2.getString("user");
-                
-                System.out.println("Comments are: "+ comments.toString());
-                
-                }
+
                 pic.setOwner(owner);
-                pic.setComments(comments);
+           
                 pic.setUUID(picid);
                 Pics.add(pic);
             }}}
             catch(Exception et) {
                 System.out.println("Can't get Profile Pic" + et);
                 return null;
-            
-            
         }
         return Pics;
     }
@@ -337,6 +341,7 @@ public class PicModel {
         Session session = cluster.connect("instagrim");
         ByteBuffer bImage = null;
         String type = null;
+        String owner=null;
         int length = 0;
         try {
             Convertors convertor = new Convertors();
@@ -345,11 +350,11 @@ public class PicModel {
          
             if (image_type == Convertors.DISPLAY_IMAGE) {
                 
-                ps = session.prepare("select image,imagelength,type from pics where picid =?");
+                ps = session.prepare("select image,imagelength,type,user from pics where picid =?");
             } else if (image_type == Convertors.DISPLAY_THUMB) {
-                ps = session.prepare("select thumb,imagelength,thumblength,type from pics where picid =?");
+                ps = session.prepare("select thumb,imagelength,thumblength,type,user from pics where picid =?");
             } else if (image_type == Convertors.DISPLAY_PROCESSED) {
-                ps = session.prepare("select processed,processedlength,type from pics where picid =?");
+                ps = session.prepare("select processed,processedlength,type,user from pics where picid =?");
             }
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
@@ -362,13 +367,16 @@ public class PicModel {
             } else {
                 for (Row row : rs) {
                     if (image_type == Convertors.DISPLAY_IMAGE) {
+                    	owner=row.getString("user");
                         bImage = row.getBytes("image");
                         length = row.getInt("imagelength");
                     } else if (image_type == Convertors.DISPLAY_THUMB) {
+                    	owner=row.getString("user");
                         bImage = row.getBytes("thumb");
                         length = row.getInt("thumblength");
                 
                     } else if (image_type == Convertors.DISPLAY_PROCESSED) {
+                    	owner=row.getString("user");
                         bImage = row.getBytes("processed");
                         length = row.getInt("processedlength");
                     }
@@ -383,6 +391,7 @@ public class PicModel {
         }
         session.close();
         Pic p = new Pic();
+        p.setOwner(owner);
         p.setPic(bImage, length, type);
 
         return p;

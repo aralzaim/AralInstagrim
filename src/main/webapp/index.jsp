@@ -1,10 +1,10 @@
 
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="uk.ac.dundee.computing.aralzaim.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
+    <jsp:useBean id="LoggedIn" class="uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn" scope="session"/>
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,17 +23,16 @@
                     <%
                         
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-                        if (lg != null) {
-                            String UserName = lg.getUser().getUsername();
-                            if (lg.getlogedin()) {
+                        if ((lg != null) && (lg.getlogedin())) {
+       
                     %>
                  <div id="content">
 	     	     <a href="/Instagrim">Home</a>
 		    	 <a href="upload.jsp">Upload</a>
-                 <a href="/Instagrim/Images/<%=lg.getUser().getUsername()%>">Your Images</a>
-                 <a href="/Instagrim/Profile/<%=lg.getUser().getUsername()%>">Your Profile</a>
+                 <a href="/Instagrim/Images/${LoggedIn.user.username}">Your Images</a>
+                 <a href="/Instagrim/Profile/${LoggedIn.user.username}">Your Profile</a>
                     <%}
-                        }else{
+                        else{
                                 %>
                <a href="register.jsp">Register</a>
                 <a href="login.jsp">Login</a>

@@ -18,8 +18,7 @@
         <h2 align="center">Your world in Black and White</h2>
         <div align="center">
       <a href="/Instagrim">Home</a> 
-      		<%LoggedIn lg=(LoggedIn) session.getAttribute("LoggedIn"); %>
-          <a href="/Instagrim/Images/<%=lg.getUser().getUsername()%>">Your Images</a>
+          <a href="/Instagrim/Images/${LoggedIn.user.username}">Your Images</a>
             <h3>File Upload</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
                 File to upload: <input type="file" name="upfile"><br/>
