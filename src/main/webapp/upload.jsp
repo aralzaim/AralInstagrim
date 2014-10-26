@@ -21,10 +21,10 @@
           <a href="/Aralstagrim/Images/${LoggedIn.user.username}">Your Images</a>
             <h3>File Upload</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
-                File to upload: <input type="file" name="upfile"><br/>
+            <p>    File to upload: <input type="file" name="upfile"><br/></p>
 
                 <br/>
-                <input type="submit" value="Press"> to upload the file!
+                <input type="submit" value="Press"> <p>to upload the file!</p>
             </form>
 
       
