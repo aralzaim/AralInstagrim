@@ -78,7 +78,7 @@ public class Profile extends HttpServlet {
 		
 		
 		 
-			response.sendRedirect("/Instagrim/Profile/"+username);
+			response.sendRedirect("/Aralstagrim/Profile/"+username);
 		  
 	  
 

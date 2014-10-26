@@ -69,7 +69,7 @@ public class Comment extends HttpServlet{
 		 
 		 System.out.println(request.getRequestURI());
 		  
-		  response.sendRedirect("/Instagrim/Images/"+ownerofpic);
+		  response.sendRedirect("/Aralstagrim/Images/"+ownerofpic);
 		  }
 		  catch(Exception e){
 			  System.out.println("Error in Comment.java");

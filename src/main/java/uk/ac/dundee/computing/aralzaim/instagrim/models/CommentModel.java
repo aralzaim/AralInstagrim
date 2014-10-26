@@ -41,7 +41,7 @@ public class CommentModel {
     
     	Date currentdate= new Date();
     	UUID commentid=Convertors.getTimeUUID();
-    	Session session= CassandraHosts.getCluster().connect("instagrim");
+    	Session session= CassandraHosts.getCluster().connect("aralstagrim");
     	java.util.UUID picid = java.util.UUID.fromString(picId);
         
     	System.out.println("inside of insertcomments");
@@ -66,7 +66,7 @@ public class CommentModel {
     	
     	UUID uuid=UUID.fromString(picid);
     	Set<CommentModel> commentrow= new HashSet<CommentModel>();
-    	Session session= CassandraHosts.getCluster().connect("instagrim");
+    	Session session= CassandraHosts.getCluster().connect("aralstagrim");
     	String querycomments="select * from comments where picid=?";
    
     	PreparedStatement psSelectComments= session.prepare(querycomments);

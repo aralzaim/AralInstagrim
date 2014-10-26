@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
- <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css"/>
+ <link rel="stylesheet" type="text/css" href="/Aralstagrim/Styles.css"/>
 <title>Slide Show</title>
 </head>
 <body>
@@ -39,7 +39,7 @@
  	
  			<%    Pic p = (Pic) iterator.next();%>
  		sImages[i] = new Image();
- 		sImages[i].src="/Instagrim/Image/<%=p.getSUUID()%>";
+ 		sImages[i].src="/Aralstagrim/Image/<%=p.getSUUID()%>";
  		console.log(i);
  		console.log(sImages[i]);
  		i++;
@@ -71,8 +71,8 @@
        <% } %>
          <footer>
          
-         <a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
-		  <a href="/Instagrim">Home</a>
+         <a href="/Aralstagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
+		  <a href="/Aralstagrim">Home</a>
             	
                 
         </footer>

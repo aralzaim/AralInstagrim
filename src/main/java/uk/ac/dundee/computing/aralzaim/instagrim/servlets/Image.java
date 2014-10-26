@@ -6,8 +6,6 @@
 
 package uk.ac.dundee.computing.aralzaim.instagrim.servlets;
 
-import com.datastax.driver.core.Cluster;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,9 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 
-import javax.naming.ldap.Rdn;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,17 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
-
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aralzaim.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aralzaim.instagrim.models.User;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aralzaim.instagrim.stores.Pic;
+
+import com.datastax.driver.core.Cluster;
 
 /**
  * Servlet implementation class Image
@@ -148,7 +141,7 @@ public class Image extends HttpServlet {
                 
                 
                
-                response.sendRedirect("/Instagrim/Profile/"+username);
+                response.sendRedirect("/Aralstagrim/Profile/"+username);
                 
         }
         }}
@@ -192,7 +185,7 @@ public class Image extends HttpServlet {
     
     	PicModel delpic=new PicModel();	
     	delpic.deletePic(username, delid);
-    	response.sendRedirect("/Instagrim/Images/"+username);
+    	response.sendRedirect("/Aralstagrim/Images/"+username);
         
     }
    

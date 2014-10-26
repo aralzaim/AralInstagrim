@@ -5,7 +5,7 @@
 <html>
     <head>
     <jsp:useBean id="LoggedIn" class="uk.ac.dundee.computing.aralzaim.instagrim.stores.LoggedIn" scope="session"/>
-        <title>Instagrim</title>
+        <title>Aralstagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
@@ -14,7 +14,7 @@
        
        	<div id="header"> 
        		<header> 
-            <h1 align="center">InstaGrim ! </h1>
+            <h1 align="center">Aralstagrim ! </h1>
             <h2 align="center">Your world in Black and White</h2>
         	</header>  
        </div>
@@ -27,10 +27,10 @@
        
                     %>
                  <div id="content">
-	     	     <a href="/Instagrim">Home</a>
+	     	     <a href="/Aralstagrim">Home</a>
 		    	 <a href="upload.jsp">Upload</a>
-                 <a href="/Instagrim/Images/${LoggedIn.user.username}">Your Images</a>
-                 <a href="/Instagrim/Profile/${LoggedIn.user.username}">Your Profile</a>
+                 <a href="/Aralstagrim/Images/${LoggedIn.user.username}">Your Images</a>
+                 <a href="/Aralstagrim/Profile/${LoggedIn.user.username}">Your Profile</a>
                     <%}
                         else{
                                 %>
@@ -46,8 +46,8 @@
            				if (lg != null) {
            				if (lg.getlogedin()){
            				%>
-             <a href="/Instagrim">Home</a></br>
-             <a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
+             <a href="/Aralstagrim">Home</a></br>
+             <a href="/Aralstagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
              <%}} %>
               &copy;Aral
          		</footer>

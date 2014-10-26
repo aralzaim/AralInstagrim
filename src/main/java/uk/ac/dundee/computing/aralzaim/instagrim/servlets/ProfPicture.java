@@ -89,7 +89,7 @@ public class ProfPicture extends HttpServlet {
                 is.close();
             }
 
-			response.sendRedirect("/Instagrim/Profile/"+username);
+			response.sendRedirect("/Aralstagrim/Profile/"+username);
 		  
 		  }
 	

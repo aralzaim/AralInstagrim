@@ -81,7 +81,7 @@ public class User {
     public boolean checkEmailExist(String username, String email){
 		
     	try{
-    	Session session= cluster.connect("instagrim");
+    	Session session= cluster.connect("aralstagrim");
     	String queryEmailList="select email from userprofiles where login=?";
     	
     	PreparedStatement ps= session.prepare(queryEmailList);
@@ -119,7 +119,7 @@ public class User {
     public void fetchUserDetailsfromDB(String username){
     	
     	try{
-    	Session session= cluster.connect("instagrim");
+    	Session session= cluster.connect("aralstagrim");
     	String querySelect="select * from userprofiles where login=?";
     	
     	PreparedStatement ps= session.prepare(querySelect);
@@ -158,7 +158,7 @@ public class User {
     	try{
     	String queryUpdate;
     	
-    	Session session = cluster.connect ("instagrim");
+    	Session session = cluster.connect ("aralstagrim");
     	
     	if(email.isEmpty())
     	{
@@ -190,7 +190,7 @@ public class User {
             System.out.println("Can't check your password");
             return false;
         }
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("aralstagrim");
    
         String query="insert into userprofiles (login,password,first_name,last_name,email) Values (?,?,?,?,?)";
         
@@ -216,7 +216,7 @@ public class User {
             System.out.println("Can't check your password");
             return false;
         }
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("aralstagrim");
         PreparedStatement ps = session.prepare("select password from userprofiles where login =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);

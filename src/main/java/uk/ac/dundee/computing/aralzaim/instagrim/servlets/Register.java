@@ -60,7 +60,7 @@ public class Register extends HttpServlet {
         us.setCluster(cluster);
         us.RegisterUser(username, password,firstname,lastname,emails,address);
         
-	response.sendRedirect("/Instagrim");
+	response.sendRedirect("/Aralstagrim");
         
     }
 

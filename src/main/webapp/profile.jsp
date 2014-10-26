@@ -6,14 +6,14 @@
 	<head> 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Profile Page</title>
-	 <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css"/>
+	 <link rel="stylesheet" type="text/css" href="/Aralstagrim/Styles.css"/>
 	</head>
 	
 	<body>
 		<div id="wrapper" align="center">
 		<div id="header">
         <header>
-            <h1 align="center">InstaGrim ! </h1>
+            <h1 align="center">Aralstagrim ! </h1>
             <h2 align="center">Your world in Black and White</h2>
         </header>
         
@@ -41,13 +41,13 @@
         		if(p!=null){
         		System.out.println(p);
         		%>
-        		<p align="center"><img src="/Instagrim/ProfilePicture/<%=p.getSUUID() %>"/></p>
+        		<p align="center"><img src="/Aralstagrim/ProfilePicture/<%=p.getSUUID() %>"/></p>
         		
         		<%}%>
         	
         	
         	<div id="content">
-        		<form method = "POST" enctype="multipart/form-data" action="/Instagrim/ProfPicture">
+        		<form method = "POST" enctype="multipart/form-data" action="/Aralstagrim/ProfPicture">
         		<p>Change Profile Picture</p>
         		<input type="file" name="profilepic"></br>
         		<input type="submit" value="Change"></br></br>
@@ -72,8 +72,8 @@
         <div id="footer">
  		<footer>
           
-               <a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
-               <a href="/Instagrim">Home</a>
+               <a href="/Aralstagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
+               <a href="/Aralstagrim">Home</a>
          
         </footer>
         </div>

@@ -60,7 +60,7 @@ public class PicModel {
     public void insertComments(String picId, Set<String> comments) {
     	
     	try{
-    	Session session= CassandraHosts.getCluster().connect("instagrim");
+    	Session session= CassandraHosts.getCluster().connect("aralstagrim");
     	java.util.UUID picid = java.util.UUID.fromString(picId);
     	String queryInsertComments="update pics SET comment=comment+? where picid=?";
     	
@@ -87,15 +87,15 @@ public class PicModel {
     	int length = b.length;
     	java.util.UUID picid= convertor.getTimeUUID();
     	
-    	Boolean success= (new File("/var/tmp/instagrim/")).mkdirs();
-    	FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/"+picid));
+    	Boolean success= (new File("/var/tmp/aralstagrim/")).mkdirs();
+    	FileOutputStream output = new FileOutputStream(new File("/var/tmp/aralstagrim/"+picid));
     	
     	output.write(b);
     	
     	byte []  thumbb = picresize(picid.toString(),types[1]);
         int thumblength= thumbb.length;
         ByteBuffer thumbbuf=ByteBuffer.wrap(thumbb);
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("aralstagrim");
         
         Date DateAdded = new Date();
         
@@ -134,8 +134,8 @@ public class PicModel {
             java.util.UUID picid = convertor.getTimeUUID();
             
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
-            Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
-            FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + picid));
+            Boolean success = (new File("/var/tmp/aralstagrim/")).mkdirs();
+            FileOutputStream output = new FileOutputStream(new File("/var/tmp/aralstagrim/" + picid));
 
             output.write(b);
             byte []  thumbb = picresize(picid.toString(),types[1]);
@@ -144,7 +144,7 @@ public class PicModel {
             byte[] processedb = picdecolour(picid.toString(),types[1]);
             ByteBuffer processedbuf=ByteBuffer.wrap(processedb);
             int processedlength=processedb.length;
-            Session session = cluster.connect("instagrim");
+            Session session = cluster.connect("aralstagrim");
 
             PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
@@ -163,7 +163,7 @@ public class PicModel {
     
     public void deletePic(String username, String picid){
     	
-    	Session session = CassandraHosts.getCluster().connect("instagrim");
+    	Session session = CassandraHosts.getCluster().connect("aralstagrim");
     	ResultSet rs=null;
     	String owner;
     	
@@ -171,7 +171,7 @@ public class PicModel {
     	java.util.UUID uuid=java.util.UUID.fromString(picid);
     	try{
     		
-    	String getOwnerPic="select user from instagrim.pics where picid=?";	
+    	String getOwnerPic="select user from aralstagrim.pics where picid=?";	
     	PreparedStatement psGetOwnerPic= session.prepare(getOwnerPic);
     	BoundStatement bsGetOwnerPic= new BoundStatement (psGetOwnerPic);
     	rs=session.execute(bsGetOwnerPic.bind(uuid));
@@ -179,8 +179,8 @@ public class PicModel {
     	
     	if(owner.equals(username))
     	{
-    	String queryDeletePic="DELETE FROM instagrim.pics WHERE picid=?";
-    	String queryDeletePicToUser="DELETE FROM instagrim.userpiclist WHERE picid=?";
+    	String queryDeletePic="DELETE FROM aralstagrim.pics WHERE picid=?";
+    	String queryDeletePicToUser="DELETE FROM aralstagrim.userpiclist WHERE picid=?";
     	
     	
     	
@@ -211,7 +211,7 @@ public class PicModel {
 
     public byte[] picresize(String picid,String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/aralstagrim/" + picid));
             BufferedImage thumbnail = createThumbnail(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(thumbnail, type, baos);
@@ -228,7 +228,7 @@ public class PicModel {
     
     public byte[] picdecolour(String picid,String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/aralstagrim/" + picid));
             BufferedImage processed = createProcessed(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
@@ -258,7 +258,7 @@ public class PicModel {
     	java.util.UUID picid=null;
         String owner=user;
     	java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
-    	Session session = CassandraHosts.getCluster().connect("instagrim");    	
+    	Session session = CassandraHosts.getCluster().connect("aralstagrim");    	
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
         
@@ -293,7 +293,7 @@ public class PicModel {
     }
     
     public Pic getProfilePicofUser(String user){
-    	Session session = CassandraHosts.getCluster().connect("instagrim");
+    	Session session = CassandraHosts.getCluster().connect("aralstagrim");
         ByteBuffer bImage = null;
         String type = null;
         int length = 0;
@@ -338,7 +338,7 @@ public class PicModel {
     }
 
     public Pic getPic(int image_type, java.util.UUID picid) {
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("aralstagrim");
         ByteBuffer bImage = null;
         String type = null;
         String owner=null;

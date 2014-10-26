@@ -14,8 +14,8 @@ public final class Keyspaces {
     public static void SetUpKeySpaces(Cluster c) {
         try {
             //Add some keyspaces here
-            String createkeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
-            String CreatePicTable = "CREATE TABLE if not exists instagrim.Pics ("
+            String createkeyspace = "create keyspace if not exists aralstagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
+            String CreatePicTable = "CREATE TABLE if not exists aralstagrim.Pics ("
                     + " user varchar,"
                     + " picid uuid, "
                     + " interaction_time timestamp,"
@@ -30,18 +30,18 @@ public final class Keyspaces {
                     + " name  varchar,"
                     + " PRIMARY KEY (picid)"
                     + ")";
-            String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
+            String Createuserpiclist = "CREATE TABLE if not exists aralstagrim.userpiclist (\n"
                     + "picid uuid,\n"
                     + "user varchar,\n"
                     + "pic_added timestamp,\n"
                     + "PRIMARY KEY (picid,pic_added)\n"
                     + ") WITH CLUSTERING ORDER BY (pic_added desc);";
-            String CreateAddressType = "CREATE TYPE if not exists instagrim.address (\n"
+            String CreateAddressType = "CREATE TYPE if not exists aralstagrim.address (\n"
                     + "      street text,\n"
                     + "      city text,\n"
                     + "      zip int\n"
                     + "  );";
-            String CreateUserProfile = "CREATE TABLE if not exists instagrim.userprofiles (\n"
+            String CreateUserProfile = "CREATE TABLE if not exists aralstagrim.userprofiles (\n"
                     + "      login text PRIMARY KEY,\n"
                      + "     password text,\n"
                     + "      first_name text,\n"
@@ -51,7 +51,7 @@ public final class Keyspaces {
                     + "  );";
             
             
-            String CreateUserProfilePic="CREATE TABLE if not exists instagrim.profilePics ("
+            String CreateUserProfilePic="CREATE TABLE if not exists aralstagrim.profilePics ("
                     + " user varchar,"
                     + " picid uuid, "
                     + " interaction_time timestamp,"
@@ -62,7 +62,7 @@ public final class Keyspaces {
                     + " PRIMARY KEY (user)"
                     + ")";
             
-            String CreateComment="CREATE TABLE if not exists instagrim.comments("
+            String CreateComment="CREATE TABLE if not exists aralstagrim.comments("
             		+"commentid uuid,"
             		+"comment varchar,"
             		+"picid uuid,"
@@ -71,10 +71,10 @@ public final class Keyspaces {
             		+"PRIMARY KEY (commentid, commentadded))"
             		+ "WITH CLUSTERING ORDER BY (commentadded desc);";
             
-            String  createCommentIndex="CREATE INDEX if not exists commentindex on instagrim.comments(picid)";
+            String  createCommentIndex="CREATE INDEX if not exists commentindex on aralstagrim.comments(picid)";
             
             
-            String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON instagrim.userpiclist (user);";
+            String CreateUserPicsIndex= "CREATE INDEX if not exists userpiclistindex ON aralstagrim.userpiclist (user);";
             
             Session session = c.connect();
             try {
@@ -84,9 +84,9 @@ public final class Keyspaces {
                         statement);
                 ResultSet rs = session
                         .execute(boundStatement);
-                System.out.println("created instagrim ");
+                System.out.println("created aralstagrim ");
             } catch (Exception et) {
-                System.out.println("Can't create instagrim " + et);
+                System.out.println("Can't create aralstagrim " + et);
             }
 
             //now add some column families 

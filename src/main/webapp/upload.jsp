@@ -10,15 +10,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Instagrim</title>
+        <title>Aralstagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
     </head>
     <body>
-        <h1 align="center">InstaGrim ! </h1>
+        <h1 align="center">Aralstagrim ! </h1>
         <h2 align="center">Your world in Black and White</h2>
         <div align="center">
-      <a href="/Instagrim">Home</a> 
-          <a href="/Instagrim/Images/${LoggedIn.user.username}">Your Images</a>
+      <a href="/Aralstagrim">Home</a> 
+          <a href="/Aralstagrim/Images/${LoggedIn.user.username}">Your Images</a>
             <h3>File Upload</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
                 File to upload: <input type="file" name="upfile"><br/>
@@ -31,8 +31,8 @@
                 <footer>
                
           
-          		<a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a>
-				<a href="/Instagrim">Home</a>
+          		<a href="/Aralstagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a>
+				<a href="/Aralstagrim">Home</a>
             	</div>
                 
         </footer>

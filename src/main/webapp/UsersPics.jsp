@@ -8,15 +8,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Instagrim</title>
-        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
+        <title>Aralstagrim</title>
+        <link rel="stylesheet" type="text/css" href="/Aralstagrim/Styles.css" />
     </head>
     
     <body>
     	<div id="wrapper" align="center">
         	<div id="header">
         	<header>
-        	<h1>InstaGrim !</h1>
+        	<h1>Aralstagrim !</h1>
      		<h2>Your world in Black and White</h2>
         	</header>
    			</div>
@@ -29,11 +29,11 @@
            %>
            
               
-              <a href="/Instagrim/Slideshow/<%=profileowner%>">Slide Show</a>
+              <a href="/Aralstagrim/Slideshow/<%=profileowner%>">Slide Show</a>
 	 <div id="header">
         <%if(profileowner.equals(lg.getUser().getUsername())){
             %>
-            <a href="/Instagrim/upload.jsp">Upload</a></br>
+            <a href="/Aralstagrim/upload.jsp">Upload</a></br>
         	<h1>Your Profile</h1>
        
         <%}else{  %>
@@ -63,9 +63,9 @@
 		
        %>
           <div id="content">
-        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> <br/>
+        <a href="/Aralstagrim/Image/<%=p.getSUUID()%>" ><img src="/Aralstagrim/Thumb/<%=p.getSUUID()%>"></a> <br/>
          
-         		<form method = "POST"  action="/Instagrim/Comment">
+         		<form method = "POST"  action="/Aralstagrim/Comment">
          		<%if(!cm.getComments(p.getSUUID()).isEmpty()){ 
          			setiterator=cm.getComments(p.getSUUID()).iterator();
          			while(setiterator.hasNext()){
@@ -82,9 +82,9 @@
         		</form>
         		
         	
-        		<a href="/Instagrim/OrginalImage/<%=p.getSUUID()%>">Orginal Image</a>
+        		<a href="/Aralstagrim/OrginalImage/<%=p.getSUUID()%>">Orginal Image</a>
         			<%if(p.getOwner().equals(lg.getUser().getUsername())) {%>
-    			<a href="/Instagrim/Delete/<%=p.getSUUID()%>" onclick="return confirm('You are about to delete a picture!')">Delete Image</a> </br>
+    			<a href="/Aralstagrim/Delete/<%=p.getSUUID()%>" onclick="return confirm('You are about to delete a picture!')">Delete Image</a> </br>
   <%} %>
              	</div>
           <%}}}} %>
@@ -95,8 +95,8 @@
         <footer>
                
           </br>
-         <a href="/Instagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
-		  <a href="/Instagrim">Home</a>
+         <a href="/Aralstagrim/Logout" onclick="return confirm('You are about to LOGOUT!')">Logout</a></br>
+		  <a href="/Aralstagrim">Home</a>
             	
                 
         </footer>
